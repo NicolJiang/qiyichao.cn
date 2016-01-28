@@ -48,26 +48,39 @@
 		});
 	}
 
+	function cleanCache(media_url) {
+		AV.Cloud.run('cleanCache', {"httpurl":media_url}).then(function(result) {
+			alert("成功清除");
+		}, function(error) {
+			// error
+			alert("清除 HTTPS 缓存失败");
+		});
+	}
+
 	document.getElementById("playlist").onclick = document.getElementById("song").onclick = function () {
 		AV.initialize('ot1IaBu4xud3XIC5aYlV1pSK-gzGzoHsz', 'bmQ4rDPpAMtvxoQgCUhpY379');
 		// 点击类型是歌曲还是单曲
 		var click_type = this.id;
 		var music_id = parseInt(document.getElementById("music_id").value);
-		if (click_type == "playlist") {
+		if (click_type == "song") {
+			// 单曲
+			var httpurl = "http://music.163.com/api/song/detail?id=" + music_id + "&ids=[" + music_id + "]";
+		} else {
 			// 歌单
 			var httpurl = "http://music.163.com/api/playlist/detail?id=" + music_id;
-		} else {
-			// 单曲
-			var httpurl = "http://music.163.com/api/playlist/detail?id=" + music_id + "&ids=[" + music_id + "]";
 		}
 		AV.Cloud.run('httpget', {"httpurl":httpurl}).then(function(result) {
 			var result = JSON.parse(result);
 			if (result && result["code"] == 200) {
-				console.log(result);
-				result = result["result"];
-				var innerHTML = '<div class="card-header">' + result["name"] + '</div>';
+				if (!result["tracks"] && result["songs"]) {
+					result["tracks"] = result["songs"];
+					var innerHTML = '<div class="card-header">成功获取单曲</div>';
+				} else {
+					result = result["result"];
+					var innerHTML = '<div class="card-header">' + result["name"] + '</div>';
+				}
 				for (var i = 0; i < result["tracks"].length; i++) {
-					innerHTML += '<div class="card-content">' + result["tracks"][i]["name"] + '<a href="javascript:getHttpsUrl(\''+ result["tracks"][i]["mp3Url"] +'\');">（点击获取 HTTPS 链接）</a><p class="small-text"><a href="' + result["tracks"][i]["mp3Url"] + '" target="_blank">' + result["tracks"][i]["mp3Url"] + '</a></p></div>';
+					innerHTML += '<div class="card-content">' + result["tracks"][i]["name"] + '<a href="javascript:getHttpsUrl(\''+ result["tracks"][i]["mp3Url"] +'\');">（点击获取 HTTPS 链接）</a><a href="javascript:cleanCache(\''+ result["tracks"][i]["mp3Url"] +'\');">（清除缓存）</a><p class="small-text"><a href="' + result["tracks"][i]["mp3Url"] + '" target="_blank">' + result["tracks"][i]["mp3Url"] + '</a></p></div>';
 				};
 				document.getElementById("show_list").innerHTML = innerHTML;
 			} else {
@@ -78,6 +91,8 @@
 			alert("获取内容失败");
 		});
 	}
+
+	document.getElementById("playlist").onclick();
 
 	/* 云函数 getHttpsUrl
 		var httpurl = request.params.httpurl;
@@ -121,6 +136,28 @@
 				response.error("error");
 			}
 		});
+	*/
+
+	/* 云函数 cleanCache
+	var httpurl = request.params.httpurl;
+
+	var query = new AV.Query("_File");
+	query.equalTo("name", httpurl);
+	query.first().then(function(object) {
+		if (object) {
+			object.destroy().then(function(){
+	            //删除成功
+	            response.success("success");
+	        }, function(error){
+	            //删除失败
+	            response.error("error");
+	        });
+		} else {
+		    response.success("success");
+		}
+	}, function(error) {
+		response.error("query error");
+	});
 	*/
 	</script>
 </body>
