@@ -1,164 +1,178 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>网易云音乐链接解析工具</title>
-	<meta http-equiv="Cache-Control" content="no-siteapp" /><!-- 禁止百度转码 -->
-	<meta http-equiv="Pragma" content="no-cache" /><!-- 禁止缓存 -->
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><!-- 编码 -->
-	<meta name="renderer" content="webkit" /><!--优先使用 WebKit -->
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /><!-- 不缩放 -->
-	<link rel="shortcut icon" href="/static/image/fire-orange.png" type="image/png" />
-	<link rel="apple-touch-icon" href="/static/image/fire-orange.png" />
-	<link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <title>网易云音乐链接解析工具</title>
+    <meta http-equiv="Cache-Control" content="no-siteapp" /><!-- 禁止百度转码 -->
+    <meta http-equiv="Pragma" content="no-cache" /><!-- 禁止缓存 -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><!-- 编码 -->
+    <meta name="renderer" content="webkit" /><!--优先使用 WebKit -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /><!-- 不缩放 -->
+    <link rel="shortcut icon" href="/static/image/fire-orange.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/static/image/fire-orange.png" />
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
 </head>
 <body>
-	<!-- Topbar Element -->
-	<header>
-		<a href="https://www.qiyichao.cn/">首页</a>
-		<a href="http://i.qiyichao.cn/">博客</a>
-	</header>
-	<!-- Card Element -->
-	<div class="card">
-		<div class="card-header">
-			网易云音乐链接解析工具
-			<p class="small-text">第一次获取 HTTPS 链接通常较慢，约 10 秒响应</p>
-		</div>
-		<div class="card-content">
-			<p>
-				<input type="text" placeholder="歌单或单曲 ID" id="music_id" value="850573" />
-			</p>
-			<p>
-				<input type="button" class="button" value="歌单" id="playlist" />
-				<input type="button" class="button" value="单曲" id="song" />
-			</p>
-			<p id="show_list"></p>
-		</div>
-		<div class="card-footer small-text">
-			<p>&copy; 2016 构建在 LeanCloud 平台，查看源码可以得到云函数源码</p>
-		</div>
-	</div>
-	<script type="text/javascript" src="https://cdn1.lncld.net/static/js/av-mini-0.6.4.js"></script>
-	<script type="text/javascript">
-	function getHttpsUrl(media_url) {
-		AV.Cloud.run('getHttpsUrl', {"httpurl":media_url}).then(function(result) {
-			prompt("复制以下 HTTPS 链接", result);
-		}, function(error) {
-			// error
-			alert("获取 HTTPS 链接失败");
-		});
-	}
+    <!-- Card Element -->
+    <div class="card">
+        <div class="card-header">
+            网易云音乐链接解析工具 <span class="right"><a href="index.html" title="我的主页">首页</a> · <a href="http://i.qiyichao.cn/" title="我的博客">博客</a></span>
+            <p class="small-text">第一次获取 HTTPS 链接通常较慢，约 10 秒响应</p>
+        </div>
+        <div class="card-content" id="input_media">
+            <p>
+                <input type="text" placeholder="歌单或单曲 ID" id="music_id" value="850573" />
+            </p>
+            <p>
+                <input type="button" class="button" value="歌单" id="playlist" />
+                <input type="button" class="button" value="单曲" id="song" />
+            </p>
+        </div>
+        <div class="card-footer small-text">
+            <p>&copy; 2016 构建在 LeanCloud 平台，查看源码可以得到云函数源码</p>
+        </div>
+    </div>
+    <script type="text/javascript" src="https://cdn1.lncld.net/static/js/av-mini-0.6.4.js"></script>
+    <script type="text/javascript">
+    function getHttpsUrl(media_url) {
+        AV.Cloud.run('getHttpsUrl', {"httpurl":media_url}).then(function(result) {
+            prompt("复制以下 HTTPS 链接", result);
+        }, function(error) {
+            // error
+            alert("获取 HTTPS 链接失败");
+        });
+    }
 
-	function cleanCache(media_url) {
-		AV.Cloud.run('cleanCache', {"httpurl":media_url}).then(function(result) {
-			alert("成功清除");
-		}, function(error) {
-			// error
-			alert("清除 HTTPS 缓存失败");
-		});
-	}
+    function cleanCache(media_url) {
+        AV.Cloud.run('cleanCache', {"httpurl":media_url}).then(function(result) {
+            alert("成功清除");
+        }, function(error) {
+            // error
+            alert("清除 HTTPS 缓存失败");
+        });
+    }
+    function insertAfter(newElement, targetElement){
+        var parent = targetElement.parentNode;
+        if (parent.lastChild == targetElement) {
+            // 如果最后的节点是目标元素，则直接添加。因为默认是最后
+            parent.appendChild(newElement);
+        }
+        else {
+            parent.insertBefore(newElement, targetElement.nextSibling);
+            //如果不是，则插入在目标元素的下一个兄弟节点 的前面。也就是目标元素的后面
+        }
+    }
 
-	document.getElementById("playlist").onclick = document.getElementById("song").onclick = function () {
-		AV.initialize('ot1IaBu4xud3XIC5aYlV1pSK-gzGzoHsz', 'bmQ4rDPpAMtvxoQgCUhpY379');
-		// 点击类型是歌曲还是单曲
-		var click_type = this.id;
-		var music_id = parseInt(document.getElementById("music_id").value);
-		if (click_type == "song") {
-			// 单曲
-			var httpurl = "http://music.163.com/api/song/detail?id=" + music_id + "&ids=[" + music_id + "]";
-		} else {
-			// 歌单
-			var httpurl = "http://music.163.com/api/playlist/detail?id=" + music_id;
-		}
-		AV.Cloud.run('httpget', {"httpurl":httpurl}).then(function(result) {
-			var result = JSON.parse(result);
-			if (result && result["code"] == 200) {
-				if (!result["tracks"] && result["songs"]) {
-					result["tracks"] = result["songs"];
-					var innerHTML = '<div class="card-header">成功获取单曲</div>';
-				} else {
-					result = result["result"];
-					var innerHTML = '<div class="card-header">' + result["name"] + '</div>';
-				}
-				for (var i = 0; i < result["tracks"].length; i++) {
-					innerHTML += '<div class="card-content">' + result["tracks"][i]["name"] + '<a href="javascript:getHttpsUrl(\''+ result["tracks"][i]["mp3Url"] +'\');">（点击获取 HTTPS 链接）</a><a href="javascript:cleanCache(\''+ result["tracks"][i]["mp3Url"] +'\');">（清除缓存）</a><p class="small-text"><a href="' + result["tracks"][i]["mp3Url"] + '" target="_blank">' + result["tracks"][i]["mp3Url"] + '</a></p></div>';
-				};
-				document.getElementById("show_list").innerHTML = innerHTML;
-			} else {
-				alert("解析失败");
-			}
-		}, function(error) {
-			// error
-			alert("获取内容失败");
-		});
-	}
+    document.getElementById("playlist").onclick = document.getElementById("song").onclick = function () {
+        AV.initialize('ot1IaBu4xud3XIC5aYlV1pSK-gzGzoHsz', 'bmQ4rDPpAMtvxoQgCUhpY379');
+        // 点击类型是歌曲还是单曲
+        var click_type = this.id;
+        var music_id = parseInt(document.getElementById("music_id").value);
+        if (click_type == "song") {
+            // 单曲
+            var httpurl = "http://music.163.com/api/song/detail?id=" + music_id + "&ids=[" + music_id + "]";
+        } else {
+            // 歌单
+            var httpurl = "http://music.163.com/api/playlist/detail?id=" + music_id;
+        }
+        AV.Cloud.run('httpget', {"httpurl":httpurl}).then(function(result) {
+            var result = JSON.parse(result);
+            if (result && result["code"] == 200) {
+                if (!result["tracks"] && result["songs"]) {
+                    result["tracks"] = result["songs"];
+                    var innerHTML = '<div class="card-header">成功获取单曲</div>';
+                } else {
+                    result = result["result"];
+                    var innerHTML = '<div class="card-header">' + result["name"] + '</div>';
+                }
+                for (var i = 0; i < result["tracks"].length; i++) {
+                    innerHTML += '<div class="card-content">' + result["tracks"][i]["name"] + '<a href="javascript:getHttpsUrl(\''+ result["tracks"][i]["mp3Url"] +'\');">（点击获取 HTTPS 链接）</a><a href="javascript:cleanCache(\''+ result["tracks"][i]["mp3Url"] +'\');">（清除缓存）</a><p class="small-text"><a href="' + result["tracks"][i]["mp3Url"] + '" target="_blank">' + result["tracks"][i]["mp3Url"] + '</a></p></div>';
+                };
+                var music_node = document.getElementById("playlist_show");
+                if (music_node) {
+                    music_node.innerHTML = innerHTML;
+                } else {
+                    var music_node = document.createElement("div");
+                    music_node.innerHTML = innerHTML;
+                    music_node.id = "playlist_show";
+                    insertAfter(music_node, document.getElementById("input_media"));
+                }
+                // document.getElementById("show_list").innerHTML = innerHTML;
+            } else {
+                alert("解析失败");
+            }
+        }, function(error) {
+            // error
+            alert("获取内容失败");
+        });
+    }
 
-	document.getElementById("playlist").onclick();
+    document.getElementById("playlist").onclick();
 
-	/* 云函数 getHttpsUrl
-		var httpurl = request.params.httpurl;
+    /* 云函数 getHttpsUrl
+        var httpurl = request.params.httpurl;
 
-		var query = new AV.Query("_File");
-		query.equalTo("name", httpurl);
-		query.first().then(function(object) {
-			if (object) {
-				response.success(object.get("url"));
-			} else {
-				AV.Cloud.httpRequest({
-					url: httpurl,
-					success: function(httpResponse) {
-						var file = new AV.File(httpurl, httpResponse.buffer);
-						file.save().then(function() {
-							response.success(file.url());
-						}, function(error) {
-							response.error("save error");
-						});
-					},
-					error: function(httpResponse) {
-						response.error("save error");
-					},
-					text: false
-				});
-			}
-		}, function(error) {
-			response.error("query error");
-		});
-	*/
+        var query = new AV.Query("_File");
+        query.equalTo("name", httpurl);
+        query.first().then(function(object) {
+            if (object) {
+                response.success(object.get("url"));
+            } else {
+                AV.Cloud.httpRequest({
+                    url: httpurl,
+                    success: function(httpResponse) {
+                        var file = new AV.File(httpurl, httpResponse.buffer);
+                        file.save().then(function() {
+                            response.success(file.url());
+                        }, function(error) {
+                            response.error("save error");
+                        });
+                    },
+                    error: function(httpResponse) {
+                        response.error("save error");
+                    },
+                    text: false
+                });
+            }
+        }, function(error) {
+            response.error("query error");
+        });
+    */
 
-	/* 云函数 httpget
-		var httpurl = request.params.httpurl;
+    /* 云函数 httpget
+        var httpurl = request.params.httpurl;
 
-		AV.Cloud.httpRequest({
-			url: httpurl,
-			success: function(httpResponse) {
-				response.success(httpResponse.text);
-			},
-			error: function(httpResponse) {
-				response.error("error");
-			}
-		});
-	*/
+        AV.Cloud.httpRequest({
+            url: httpurl,
+            success: function(httpResponse) {
+                response.success(httpResponse.text);
+            },
+            error: function(httpResponse) {
+                response.error("error");
+            }
+        });
+    */
 
-	/* 云函数 cleanCache
-	var httpurl = request.params.httpurl;
+    /* 云函数 cleanCache
+    var httpurl = request.params.httpurl;
 
-	var query = new AV.Query("_File");
-	query.equalTo("name", httpurl);
-	query.first().then(function(object) {
-		if (object) {
-			object.destroy().then(function(){
-	            //删除成功
-	            response.success("success");
-	        }, function(error){
-	            //删除失败
-	            response.error("error");
-	        });
-		} else {
-		    response.success("success");
-		}
-	}, function(error) {
-		response.error("query error");
-	});
-	*/
-	</script>
+    var query = new AV.Query("_File");
+    query.equalTo("name", httpurl);
+    query.first().then(function(object) {
+        if (object) {
+            object.destroy().then(function(){
+                //删除成功
+                response.success("success");
+            }, function(error){
+                //删除失败
+                response.error("error");
+            });
+        } else {
+            response.success("success");
+        }
+    }, function(error) {
+        response.error("query error");
+    });
+    */
+    </script>
 </body>
 </html>
