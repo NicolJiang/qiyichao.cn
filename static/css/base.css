@@ -14,8 +14,6 @@ body {
     overflow-y: scroll;
 }
 
-
-
 a {
     cursor: pointer;
     text-decoration: none;
@@ -80,37 +78,36 @@ footer {
 }
 
 .card-sidebar {
-    background-color: #5F9EA0;
+    background-color: #35B8CD;
     color: white;
-    padding: 1rem;
+    padding: 4rem 1rem;
     border-top: 1px solid rgba(160, 160, 160, 0.2);
     border-bottom: 1px solid rgba(160, 160, 160, 0.2);
-}
-
-@media (max-width: 640px) {
-    .card {
-        width: 90%;
-    }
-}
-
-.badge {
-    display: inline-block;
-    min-width: 10px;
-    padding: .25em .625em;
-    font-size: 1rem;
-    font-weight: 700;
-    color: #fff;
-    line-height: 1;
-    vertical-align: baseline;
-    white-space: nowrap;
-    background-color: #999;
-    border-radius: 0;
+    background: url("//dn-iold8ot9.qbox.me/h5wRbAT96BvAsVEwDJ8feRRc0zjJe2zJcda7kGfL.jpg");
     text-align: center;
 }
 
+.card-sidebar a[href] {
+    color: white;
+}
+
+@media (max-width: 1024px) {
+    .card {
+        width: 90%;
+    }
+    .card-header {
+        font-size: 12px;
+    }
+    .card-content {
+        font-size: 0.8rem;
+    }
+    code, pre, pre code {
+        font-size: 0.8rem;
+    }
+}
+
 .card-header {
-    padding: 1rem;
-    font-weight: bold;
+    padding: 0.5rem 1rem;
 }
 
 .card-content {
