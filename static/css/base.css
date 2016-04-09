@@ -96,10 +96,10 @@ footer {
 
 @media (max-width: 1024px) {
     .card {
-        width: 90%;
+        width: 95%;
     }
     .card-header {
-        font-size: 12px;
+        font-size: 0.8rem;
     }
     .card-content {
         font-size: 0.8rem;
