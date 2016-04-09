@@ -126,6 +126,7 @@ footer {
     }
     .card-footer {
         padding: 1rem 0;
+        font-family: Lucida Console, Bookman Old Style, 'Ubuntu', Georgia, "Times New Roman", "Microsoft YaHei", "微软雅黑", STXihei, "华文细黑", serif;
     }
     code, pre, pre code {
         font-size: 0.8rem;
