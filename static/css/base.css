@@ -101,9 +101,14 @@ footer {
     }
     .card-header {
         font-size: 0.8rem;
+        padding: 0;
     }
     .card-content {
         font-size: 0.8rem;
+        padding: 0;
+    }
+    .card-footer {
+        padding: 0;
     }
     code, pre, pre code {
         font-size: 0.8rem;
