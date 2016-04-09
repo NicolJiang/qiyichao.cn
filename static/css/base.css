@@ -94,43 +94,35 @@ footer {
     color: white;
 }
 
-@media (min-width: 1024px) {
-    .card .card-header {
-        padding: 0.5rem 1rem;
-    }
-
-    .card .card-content {
-        padding: 1rem;
-        border-top: 1px solid rgba(160, 160, 160, 0.2);
-        border-bottom: 1px solid rgba(160, 160, 160, 0.2);
-    }
-
-    .card .card-footer {
-        padding: 1rem;
-        font-family: Lucida Console, Bookman Old Style, 'Ubuntu', Georgia, "Times New Roman", "Microsoft YaHei", "微软雅黑", STXihei, "华文细黑", serif;
-    }
-}
-
 @media (max-width: 1024px) {
     .card {
         width: 95%;
         box-shadow: none;
     }
     .card-header {
-        padding: 1rem 0;
         font-size: 0.8rem;
     }
     .card-content {
-        padding: 1rem 0;
         font-size: 0.8rem;
-    }
-    .card-footer {
-        padding: 1rem 0;
-        font-family: Lucida Console, Bookman Old Style, 'Ubuntu', Georgia, "Times New Roman", "Microsoft YaHei", "微软雅黑", STXihei, "华文细黑", serif;
     }
     code, pre, pre code {
         font-size: 0.8rem;
     }
+}
+
+.card-header {
+    padding: 0.5rem 1rem;
+}
+
+.card-content {
+    padding: 1rem;
+    border-top: 1px solid rgba(160, 160, 160, 0.2);
+    border-bottom: 1px solid rgba(160, 160, 160, 0.2);
+}
+
+.card .card-footer {
+    padding: 1rem;
+    font-family: Lucida Console, Bookman Old Style, 'Ubuntu', Georgia, "Times New Roman", "Microsoft YaHei", "微软雅黑", STXihei, "华文细黑", serif;
 }
 
 input[type="text"], input[type="password"], input[type="email"], input[type="number"], input[type="button"], .button {
