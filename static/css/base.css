@@ -102,6 +102,11 @@ footer {
     .card-header {
         font-size: 0.8rem;
     }
+    .card-sidebar {
+        background: none;
+        color: black;
+        text-align: left;
+    }
     .card-content {
         font-size: 0.8rem;
     }
