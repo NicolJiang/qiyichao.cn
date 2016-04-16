@@ -106,6 +106,7 @@ footer {
         text-align: left;
         background: none;
         color: black;
+        padding: 0 2rem;
     }
     .card-content {
         font-size: 0.8rem;
