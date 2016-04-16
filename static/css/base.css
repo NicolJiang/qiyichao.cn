@@ -103,9 +103,9 @@ footer {
         font-size: 0.8rem;
     }
     .card-sidebar {
+        text-align: left;
         background: none;
         color: black;
-        text-align: left;
     }
     .card-content {
         font-size: 0.8rem;
