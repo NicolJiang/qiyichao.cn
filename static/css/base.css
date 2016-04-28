@@ -96,8 +96,7 @@ footer {
 
 @media (max-width: 1024px) {
     .card {
-        width: 100%;
-        box-shadow: none;
+        width: 98%;
     }
     .card-header {
         font-size: 0.8rem;
@@ -157,4 +156,8 @@ code {
 
 .card-content a:visited, .card-content a:link {
     color: #3354AA;
+}
+
+::selection {
+    color: rgb(82, 53, 191);
 }
